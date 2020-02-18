@@ -1,7 +1,7 @@
 <snippet>
   <content>
 
-## Ansible.VxLAN.Python
+## Python.VxLAN.Cumulus
 
 The scope of this project is to automate the deployment of vxlan's on Cumulus switches,
 <br>and use evpn as a control-plane mechanism. But this time using the API for the Cumulus
