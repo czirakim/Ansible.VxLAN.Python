@@ -5,7 +5,7 @@
 
 The scope of this project is to automate the deployment of vxlan's on Cumulus switches,
 <br>and use evpn as a control-plane mechanism. But this time using the API for the Cumulus
-<br>switches and using python. This project only applies to leaf switches.  
+<br>switches and using python (Python 2.7.17). This project only applies to leaf switches.  
 
 ## Usage
 
