@@ -26,8 +26,8 @@ Variables file : var.py
 
 ## Update
 03/03/2020
-I've added a function(conf_pending) to capture the config that it's commited and save it in a file for each
-<br> device. The file will aslo have the date/time when it was captured in it's name.
+I've added a function(conf_pending) to capture the config that it's committed and save it in a file for each
+<br> device. The file will also have the date/time when it was captured in it's name.
 
 ## Credits
 This was written by Mihai Cziraki
