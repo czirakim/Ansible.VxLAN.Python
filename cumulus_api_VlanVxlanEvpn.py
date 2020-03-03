@@ -1,3 +1,6 @@
+import datetime
+import re
+import json
 import requests 
 from var import vlans,id,clagid,spinenumber
 #suppressing ssl warnings
@@ -5,8 +8,7 @@ requests.packages.urllib3.disable_warnings()
 
 
 # http headers
-httpheaders = {'Content-Type': 'application/json',
-           'Authorization': 'Basic Y3VtdWx1czpDdW11bHVzTGludXgh' }
+httpheaders = {'Content-Type': 'application/json', 'Authorization': 'Basic Y3VtdWx1czpDdW11bHVzTGludXgh'}
 
 
 def post(com,dev_id):
@@ -14,6 +16,9 @@ def post(com,dev_id):
       api_url = "https://10.0.0.%i:8080/nclu/v1/rpc" % (dev_id)
       payload = '{"cmd": %s}' % (command)
       request = requests.post(api_url,headers=httpheaders,data = payload,verify=False)
+      request.encoding = 'utf-8'
+      return request.text
+       
 #      r_url = request.text
 #      print("reply is:%s"%r_url)
 
@@ -64,7 +69,7 @@ def create_evpn(b):
           post(command,b)
           command = '"add bgp network 10.1.1.%i/32"' % (b)
           post(command,b)
-          print("BGP eVPN  is done on device %i " ) % (b)
+          print("BGP eVPN is done on device %i " ) % (b)
 
 def create_VTEPanycast(b):
        y = b+1
@@ -78,7 +83,7 @@ def create_VTEPanycast(b):
           post(command,b)
           command = '"add bgp network 10.10.10.%i/32 "' % (y)
           post(command,b) 
-       print("VTEP anycast  is done on device %i " ) % (b)
+       print("VTEP anycast is done on device %i " ) % (b)
 
 def create_clagRole(b):
        if b%2 == 0:
@@ -88,6 +93,18 @@ def create_clagRole(b):
           command = '"add clag peer sys-mac 44:38:39:FF:01:01 interface swp5-6 primary"'
           post(command,b)
 
+def conf_pending(b):
+     command = '"pending"'
+     post(command,b)
+     result = post(command,b)
+     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+     final = ansi_escape.sub('', result)
+     dev_name = 'Switch_%i_' % (b)
+     file_name = dev_name + str(datetime.datetime.now().strftime("%Y.%m.%d-%H.%M")) + '.txt'
+     with open (file_name,'w') as file:
+            file.write(final)
+#     print("Pending config:")
+#     print(result)
 
 for dev in id:
     command = '"add clag port bond bond%i interface swp3 clag-id %i"' % (clagid,clagid)
@@ -97,6 +114,7 @@ for dev in id:
     create_vxlan(dev)
     create_evpn(dev)
     create_VTEPanycast(dev)
+    conf_pending(dev)
     command = '"commit"' 
     post(command,dev) 
     print("config commited on device %i") % (dev) 
