@@ -24,6 +24,10 @@ The project is made of 2 files. One with variables like: a list of vlans,
 Variables file : var.py
 <br>Script: cumulus_api_VlanVxlanEvpn.py
 
+## Update
+I've added a function(conf_pending) to capture the config that it's commited and save it in a file for each
+<br> device. The file will aslo have the date/time when it was captured in it's name.
+
 ## Credits
 This was written by Mihai Cziraki
 </content>
